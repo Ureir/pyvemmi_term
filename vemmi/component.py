@@ -1,6 +1,6 @@
 ﻿# Classes for VEMMI Components
-from . import protocol as p
 from . import constant as cst
+
 
 class Component:
 
@@ -15,24 +15,29 @@ class Component:
         self.kind = kind
         self.dirty = dirty
 
+
 class MenuChoice(Component):    # Virtual Menu Choice
     NotAccessible: bool = False
     Text: str = ""
     LocActAct = []
     LocActVal = []
 
-class BarMenuChoice(MenuChoice): # Application Bar first level
+
+class BarMenuChoice(MenuChoice):    # Application Bar first level
     kind = cst.OPC_BAR_MENU_CHOICE
     pass
+
 
 class PullDownMenuChoice(MenuChoice):
     kind = cst.OPC_PULL_DOWN_CHOICE
     Separated: bool = False
 
+
 class CascadingMenuChoice(MenuChoice):
     kind = cst.OPC_CASC_MENU_CHOICE
     Separated: bool = False
-    
+
+
 class Button(Component):
     kind = cst.OPC_BUTTON
     Height: float = -1.0
@@ -44,10 +49,12 @@ class Button(Component):
     Text: str = ""
     LocActAct = []
     LocActVal = []
-    
+
+
 class PopUpMenuChoice(MenuChoice):
     kind = cst.OPC_POP_UP_CHOICE
     Separated: bool = False
+
 
 class DialogComponent(Component):
     XPos: float = -1.0
@@ -57,18 +64,21 @@ class DialogComponent(Component):
     Closed: bool = False
     Colour: int = -1
 
+
 class Separator(DialogComponent):
     kind = cst.OPC_SEPARATOR
     Vertical: bool = False
-    
+
 
 class Frame(DialogComponent):
     kind = cst.OPC_FRAME
     TextLabel: str = ""
     LabelFont: int = -1
 
+
 class InTextStr:
     pass
+
 
 class TextArea(DialogComponent):
     kind = cst.OPC_TEXT_AREA
@@ -80,25 +90,29 @@ class TextArea(DialogComponent):
     InText: InTextStr = None
     TextCompRef: int = -1
     # No colour!
-    
+
+
 class TextCmp(Component):
     kind = cst.OPC_TEXT_COMPONENT
     PreviousText: int = -1
     CurrentText: InTextStr = None
     NextText: int = -1
-    
+
+
 class SensitiveText(Component):
     kind = cst.OPC_SENSITIVE_TEXT
     NotAccessible: bool = False
     LocActAct = []
     LocActVal = []
-    
+
+
 class GraphicOutputArea(DialogComponent):
     kind = cst.OPC_GRAPHIC_OUTPUT_AREA
     Maximizable: bool = False
     DispType: int = 0
     BIN: int = -1
     VIN: int = -1
+
 
 class PushButton(DialogComponent):
     kind = cst.OPC_BOX_PUSH_BUTTON
@@ -108,7 +122,8 @@ class PushButton(DialogComponent):
     Text: str = ""
     LocActAct = []
     LocActVal = []
-    
+
+
 class TextInput(DialogComponent):
     kind = cst.OPC_TEXT_INPUT_FIELD
     NotAccessible: bool = False
@@ -125,7 +140,8 @@ class TextInput(DialogComponent):
     InputTransformation: int = 0
     LocActAct = []
     LocActVal = []
-    
+
+
 class CheckBox(DialogComponent):
     kind = cst.OPC_CHECK_BOX
     NotAccessible: bool = False
@@ -134,7 +150,8 @@ class CheckBox(DialogComponent):
     DefMarked: bool = False
     LocActAct = []
     LocActVal = []
-    
+
+
 class RadioButton(DialogComponent):
     kind = cst.OPC_RADIO_BUTTON
     NotAccessible: bool = False
@@ -145,6 +162,7 @@ class RadioButton(DialogComponent):
     LocActAct = []
     LocActVal = []
 
+
 class ListBoxItem:
     ListIndex: int = -1
     Text: str = ""
@@ -152,6 +170,7 @@ class ListBoxItem:
     IconReference: int = -1
     ItemLocAct = []
     ItemLocVal = []
+
 
 class ListBox(DialogComponent):
     kind = cst.OPC_LIST_BOX
@@ -167,6 +186,7 @@ class ListBox(DialogComponent):
     LocActVal = []
     items: ListBoxItem = []
 
+
 class ComboBox(DialogComponent):
     kind = cst.OPC_COMBO_BOX
     NotAccessible: bool = False
@@ -179,7 +199,8 @@ class ComboBox(DialogComponent):
     LocActAct = []
     LocActVal = []
     items: ListBoxItem = []
-    
+
+
 class Slider(DialogComponent):
     kind = cst.OPC_SLIDER
     NotAccessible: bool = False
@@ -192,6 +213,7 @@ class Slider(DialogComponent):
     LocActAct = []
     LocActVal = []
 
+
 class SensitiveArea(DialogComponent):
     kind = cst.OPC_SENSITIVE_AREA
     NotAccessible: bool = False
@@ -199,6 +221,7 @@ class SensitiveArea(DialogComponent):
     AssGraphicReference: int = -1
     LocActAct = []
     LocActVal = []
+
 
 class MultimediaArea(DialogComponent):
     kind = cst.OPC_MULTIMEDIA_AREA
@@ -209,4 +232,3 @@ class MultimediaArea(DialogComponent):
     MultimediaContent: str = ""
     DirectNavigation: bool = False
     NonControlledMode: bool = False
-    

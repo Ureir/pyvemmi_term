@@ -1,30 +1,31 @@
 ﻿# Classes for VEMMI Components
-import .protocol as p
-import .constant as cst
+from . import protocol as p
+from . import constant as cst
+
 
 class Attribute:
 
     name = None
     value = None
     dirty = False
-    
-    def __init__(self, name: bytes, value: object = None, dirty: bool = False)
+
+    def __init__(self, name: bytes, value: object = None, dirty: bool = False):
         self.name = name
         self.value = value
         self.dirty = dirty
-        
-    def setval(self, value: object = None)
+
+    def setval(self, value: object = None):
         """Update value only"""
         self.value = value
-        
-    def setdirty(self, flag: bool = True)
+
+    def setdirty(self, flag: bool = True):
         """Update dirty flag only"""
         self.dirty = flag
-        
+
     def encode(self) -> bytearray:
-        """Encode attribute, typically for CreateObject or StoreObject""" 
+        """Encode attribute, typically for CreateObject or StoreObject"""
         return bytearray(0)
-        
+
     def modified(self) -> bytearray:
         """Encode attribute for ModifyObject"""
         if self.dirty:
@@ -32,34 +33,36 @@ class Attribute:
         else:
             return bytearray(0)
 
+
 class BoolAttribute:
-    def __init__(self, name: bytes, value: bool = False, dirty: bool = True)
+    def __init__(self, name: bytes, value: bool = False, dirty: bool = True):
         super().__init__(name, value, dirty)
-        
+
     def encode(self) -> bytearray:
         if self.value:
             return bytearray(self.name)
         else:
             return bytearray(0)
-            
+
     def modified(self) -> bytearray:
         if self.dirty:
             ret = bytearray(self.name)
-            if !self.value:
+            if not self.value:
                 ret = ret.join(ret)
             return ret
         else:
             return bytearray(0)
-            
+
+
 class NDCAttribute:
-    def __init__(self, name: bytes, value: float = 0.0, dirty: bool = True)
+    def __init__(self, name: bytes, value: float = 0.0, dirty: bool = True):
         super().__init__(name, value, dirty)
-        
+
     def encode(self) -> bytearray:
         ret = bytearray(self.name)
         ret.join(p.EncodeNDC(self.value))
         return ret
-            
+
     def modified(self) -> bytearray:
         if self.dirty:
             ret = bytearray(self.name)
@@ -68,10 +71,11 @@ class NDCAttribute:
             ret = bytearray(0)
         return ret
 
+
 class IntAttribute:
-    def __init__(self, name: bytes, value: int = 0, dirty: bool = True)
+    def __init__(self, name: bytes, value: int = 0, dirty: bool = True):
         super().__init__(name, value, dirty)
-        
+
     def encode(self) -> bytearray:
         if self.value != 0:
             ret = bytearray(self.name)
@@ -79,7 +83,7 @@ class IntAttribute:
         else:
             ret = bytearray(0)
         return ret
-            
+
     def modified(self) -> bytearray:
         if self.dirty:
             ret = bytearray(self.name)
@@ -88,10 +92,11 @@ class IntAttribute:
             ret = bytearray(0)
         return ret
 
+
 class StrAttribute:
-    def __init__(self, name: bytes, value: str = "", dirty: bool = True)
+    def __init__(self, name: bytes, value: str = "", dirty: bool = True):
         super().__init__(name, value, dirty)
-        
+
     def encode(self) -> bytearray:
         if self.value != 0:
             ret = bytearray(self.name)
@@ -99,7 +104,7 @@ class StrAttribute:
         else:
             ret = bytearray(0)
         return ret
-            
+
     def modified(self) -> bytearray:
         if self.dirty:
             ret = bytearray(self.name)
@@ -107,6 +112,7 @@ class StrAttribute:
         else:
             ret = bytearray(0)
         return ret
+
 
 def parseNDC(params: bytes) -> (float, bytes):
     val = 0
@@ -123,6 +129,7 @@ def parseNDC(params: bytes) -> (float, bytes):
     i = i+1
     return (val/one, params[i:])
 
+
 def parse_int(params: bytes) -> (int, bytes):
     val = 0
     i = 0
@@ -134,6 +141,7 @@ def parse_int(params: bytes) -> (int, bytes):
     val = (val << 7) | (code & 127)
     i = i+1
     return (val, params[i:])
+
 
 def parse_str(params: bytes, coding: str) -> (str, bytes):
     val = ""
@@ -159,18 +167,18 @@ def parse(params: bytes, out: dict) -> bytes:
                 if params[0] == opc:
                     val = False
                     params = params[1:]
-                out |= { opc: BoolAttribute(name=opc, value=val) }
-                
-            case 9 :            # NDC attributes    
+                out |= {opc: BoolAttribute(name=opc, value=val)}
+
+            case 9:            # NDC attributes
                 val, params = parseNDC(params[1:])
-                out |= { opc: NDCAttribute(name=opc, value=val) }
-                
-            case 10|11|12|13:   # Integer attributes
-                val, params = parseInteger(params[1:])
-                out |= { opc: IntAttribute(name=opc, value=val) }
-            
+                out |= {opc: NDCAttribute(name=opc, value=val)}
+
+            case 10 | 11 | 12 | 13:   # Integer attributes
+                val, params = parse_int(params[1:])
+                out |= {opc: IntAttribute(name=opc, value=val)}
+
             case 14:            # String attributes
-                val, params = parseInteger(params[1:])
-                out |= { opc: StrAttribute(name=opc, value=val) }
-        opc = params[0]        
+                val, params = parse_int(params[1:])
+                out |= {opc: StrAttribute(name=opc, value=val)}
+        opc = params[0]
     return params

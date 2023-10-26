@@ -1,15 +1,14 @@
 ﻿# Classes for VEMMI Objects
-from . import component as cmp
 from . import constant as cst
 
+
 class VEMMI_Object:
-    kind  : bytes = None
-    dirty : bool = True
-    local : None            # local gui instance object, for terminals
+    kind: bytes = None
+    dirty: bool = True
+    local: None            # local gui instance object, for terminals
 
     attributes = {}
     components = {}
-
 
 
 class ApplicationBar(VEMMI_Object):
@@ -32,6 +31,7 @@ class ButtonBar(VEMMI_Object):
     NotAccessible: bool = False
     Title: str = ""
 
+
 class PopUpMenu(VEMMI_Object):
     kind = cst.OPC_POP_UP_MENU
     XPos: float = -1.0
@@ -42,6 +42,7 @@ class PopUpMenu(VEMMI_Object):
     Modal: bool = False
     Closed: bool = False
     NotAccessible: bool = False
+
 
 class DialogueBox(VEMMI_Object):
     kind = cst.OPC_DIALOG_BOX
@@ -60,6 +61,7 @@ class DialogueBox(VEMMI_Object):
     BIN: int = -1
     DispType: int = -1
 
+
 class MessageBox(VEMMI_Object):
     kind = cst.OPC_MESSAGE_BOX
     XPos: float = -1.0
@@ -71,10 +73,11 @@ class MessageBox(VEMMI_Object):
     Modal: bool = False
     Title: str = ""
     NoBorder: bool = False
-    AttributedText: InTextAttribute = None
+    AttributedText: str = None
     MaxTime: int = 0
     DestroyEvent: int = 0
     NoSound: bool = False
+
 
 class Operative(VEMMI_Object):
     kind = cst.OPC_OPERATIVE_OBJECT
@@ -87,36 +90,44 @@ class Operative(VEMMI_Object):
     ProgType: int = 0
     DefaultDirectory: str = ""
 
+
 class Bitmap(VEMMI_Object):
     kind = cst.OPC_BITMAP_OBJECT
+
 
 class DirectBitmap(Bitmap):
     BmWidth: int = -1
     BmHeight: int = -1
     BmCompr: int = 0
 
+
 class DirectBitmapIndexed(DirectBitmap):
     BmBitsPerPixel: int = 1
     BmClrEntry: int = 0
     BmClrIxList: int = []
 
+
 class DirectBitmapColour(DirectBitmap):
     BmBitsPerComp: int = 8
     BmClrCompList: int = []
 
+
 class FileBitmap(Bitmap):
     Filename: str = ""
     PictFileType: int = 0
+
 
 class Videotex(VEMMI_Object):
     kind = cst.OPC_VIDEOTEX_OBJECT
     VTX: bytearray = bytearray(0)
     Filename: str = ""
 
+
 class Text(VEMMI_Object):
     kind = cst.OPC_TEXT_OBJECT
     Text: str = ""
     Filename: str = ""
+
 
 class Font(VEMMI_Object):
     kind = cst.OPC_FONT_OBJECT
@@ -127,9 +138,11 @@ class Font(VEMMI_Object):
     FnItalic: bool = False
     FnColour: int = 0
 
+
 class Metacode(VEMMI_Object):
     kind = cst.OPC_METACODE_OBJECT
     VEMMICommands = []
+
 
 class Sound(VEMMI_Object):
     kind = cst.OPC_SOUND_OBJECT
@@ -137,14 +150,14 @@ class Sound(VEMMI_Object):
     Filename: str = ""
     SoundForm: int = 0
 
+
 class Video(VEMMI_Object):
     kind = cst.OPC_VIDEO_OBJECT
     Closed: bool = False
     VideoForm: int = 0
     Filename: str = ""
-    
+
+
 class Multimedia(VEMMI_Object):
     kind = cst.OPC_MULTIMEDIA_OBJECT
     Filename: str = ""
-
-    
